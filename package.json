@@ -1,0 +1,17 @@
+{
+  "name": "cistercian.date",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "node dev.mjs",
+    "build": "node build.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "esbuild": "^0.23.1",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {}
+}

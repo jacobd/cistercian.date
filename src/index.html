@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cistercian Date</title>
+
+    <meta property="og:site_name" content="Cistercian Date" />
+    <meta
+      property="og:title"
+      content="Cistercian Date | Time in Medieval Numerals"
+    />
+    <meta
+      property="og:description"
+      content="Experience time in a unique way with Cistercian numerals - a number notation system developed by 13th century monks. Watch as the current date and time are displayed using these elegant historical symbols."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cistercian.date" />
+
+    <meta property="og:image" content="/imgs/cistercian-preview.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="495" />
+    <meta
+      property="og:image:alt"
+      content="Cistercian Date display showing current time"
+    />
+
+    <meta name="twitter:site" content="@cisterciandate" />
+    <meta
+      name="twitter:title"
+      content="Cistercian Date | Time in Medieval Numerals"
+    />
+    <meta
+      name="twitter:description"
+      content="Experience time in a unique way with Cistercian numerals - a number notation system developed by 13th century monks. Watch as the current date and time are displayed using these elegant historical symbols."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:src" content="/imgs/cistercian-preview.png" />
+
+    <meta
+      name="msapplication-TileImage"
+      content="/imgs/cistercian-preview.png"
+    />
+    <meta name="theme-color" content="#FFF" />
+    <meta name="msapplication-TileColor" content="#FFF" />
+
+    <meta
+      name="description"
+      content="An implementation of Cistercian numerals - the number system created by medieval monks - displaying the current date and time in real-time."
+    />
+
+    <link rel="apple-touch-icon" sizes="600x600" href="/imgs/icon.png" />
+    <link rel="icon" type="image/png" href="/imgs/icon.png" />
+    <link rel="icon" type="image/x-icon" href="/imgs/icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <div class="container">
+      <canvas id="cistercian-date"></canvas>
+      <div class="datetime">
+        <div class="v1"></div>
+        <div class="v2"></div>
+        <div class="v3"></div>
+        <div class="v4"></div>
+        <div class="v5"></div>
+        <div class="v6"></div>
+      </div>
+    </div>
+    <div class="controls">
+      <img src="/imgs/q.png" width="40" height="40" class="question-icon" />
+      <div class="menu">
+        <img src="/imgs/x.png" width="40" height="40" class="close-icon" />
+        <div class="controls-text">
+          <div class="format-options">
+            <div class="format-option">
+              <label for="iso">
+                <input type="radio" id="iso" name="dateFormat" value="iso" checked>
+                <span>yyyy/mm/dd</span>
+              </label>
+            </div>
+            <div class="format-option">
+              <label for="us">
+                <input type="radio" id="us" name="dateFormat" value="us">
+                <span>mm/dd/yyyy</span>
+              </label>
+            </div>
+            <div class="format-option">
+              <label for="eu">
+                <input type="radio" id="eu" name="dateFormat" value="eu">
+                <span>dd/mm/yyyy</span>
+              </label>
+            </div>
+          </div>
+          <div class="slider-option">
+            <label for="weightSlider">Line weight</label>
+            <input
+              type="range"
+              id="weightSlider"
+              name="weightSlider"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.5"
+            >
+          </div>
+          <div class="toggle-option">
+            <input type="checkbox" id="showDecimals" name="showDecimals">
+            <label for="showDecimals">Show decimal numbers</label>
+          </div>
+          <div class="about">
+            By <a href="https://www.jacobdehart.com">Jacob DeHart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/main.js"></script>
+  </body>
+</html>
