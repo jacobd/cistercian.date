@@ -11,7 +11,7 @@
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
-
+  --spacing-lg: 2rem;
   --border-width: 2px;
   --border-radius: 4px;
 
@@ -27,7 +27,6 @@ body {
   font-style: normal;
   font-variation-settings: 'wdth' 100;
   margin: 0;
-
 }
 
 /* Main container */
@@ -62,7 +61,7 @@ body {
 
 /* Controls */
 .controls {
-  position: absolute;
+  position: fixed;
   bottom: var(--margin-edge);
   right: var(--margin-edge);
 }
@@ -278,12 +277,18 @@ body {
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
 }
 
 .stopwatch-decimal {
   font-size: 1.2rem;
   min-height: 1.5rem;
   font-variant-numeric: tabular-nums;
+}
+
+.stopwatch-decimal.hidden {
+  display: none;
 }
 
 .site-footer {
@@ -307,4 +312,97 @@ body {
 
 .site-footer a:hover {
   border-bottom-color: var(--color-text);
+}
+
+.build-a-glyph {
+  text-align: center;
+  margin: var(--spacing-lg) 0;
+}
+
+.build-a-glyph h2 {
+  margin-bottom: var(--spacing-lg);
+}
+
+.result-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: calc(var(--spacing-lg) * 2);
+  padding: var(--spacing-lg);
+  padding-bottom: calc(var(--spacing-lg));
+}
+
+.result-display canvas {
+  margin: var(--spacing-lg) 0 0;
+}
+
+.result-decimal {
+  font-size: 1.5rem;
+  min-height: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  margin-top: var(--spacing-sm);
+
+}
+
+.result-decimal.hidden {
+  display: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: calc(var(--spacing-lg) * 1);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: calc(var(--spacing-sm)) var(--spacing-md) calc(var(--spacing-lg) * 2);
+}
+
+.grid-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+}
+
+.grid-cell canvas {
+  transition: opacity 0.2s ease;
+}
+
+.grid-cell.selected canvas {
+
+}
+
+.grid-cell-decimal {
+  font-size: 0.7rem;
+  min-height: 1.2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.grid-cell-decimal.hidden {
+  display: none;
+}
+
+/* Hide all decimal displays by default */
+.decimal {
+  display: none;
+}
+
+/* Show decimals when body has show-decimals class */
+body.show-decimals .decimal {
+  display: block;
+}
+
+/* Special case for datetime grid items */
+body.show-decimals .datetime.decimal {
+  display: grid;
+}
+
+/* Remove redundant hidden classes */
+.datetime.hidden,
+.stopwatch-decimal.hidden,
+.result-decimal.hidden,
+.grid-cell-decimal.hidden {
+  display: none !important;
 }

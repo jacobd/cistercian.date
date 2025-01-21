@@ -1,71 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="http://schema.org/WebApplication">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cistercian Date</title>
+    <title>Cistercian Date | Medieval Number System Clock</title>
 
-    <meta property="og:site_name" content="Cistercian Date" />
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Cistercian Date | Medieval Number System Clock" />
     <meta
-      property="og:title"
-      content="Cistercian Date | Time in Medieval Numerals"
+      name="description"
+      content="Experience time in a unique way with Cistercian numerals - a number notation system developed by 13th century monks. Watch as the current date and time are displayed using these elegant historical symbols."
     />
+    <meta name="author" content="Jacob DeHart" />
+    <meta name="keywords" content="cistercian numerals, medieval numbers, time display, clock, cistercian date, cistercian clock, medieval mathematics, historical numerals" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cistercian.date" />
+    <meta property="og:site_name" content="Cistercian Date" />
+    <meta property="og:title" content="Cistercian Date | Medieval Number System Clock" />
     <meta
       property="og:description"
       content="Experience time in a unique way with Cistercian numerals - a number notation system developed by 13th century monks. Watch as the current date and time are displayed using these elegant historical symbols."
     />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://cistercian.date" />
-
-    <meta property="og:image" content="/imgs/cistercian-preview.png" />
+    <meta property="og:image" content="https://cistercian.date/imgs/cistercian-preview.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="495" />
-    <meta
-      property="og:image:alt"
-      content="Cistercian Date display showing current time"
-    />
+    <meta property="og:image:alt" content="Cistercian Date display showing current time" />
 
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@cisterciandate" />
-    <meta
-      name="twitter:title"
-      content="Cistercian Date | Time in Medieval Numerals"
-    />
+    <meta name="twitter:creator" content="@jacobdehart" />
+    <meta name="twitter:title" content="Cistercian Date | Medieval Number System Clock" />
     <meta
       name="twitter:description"
       content="Experience time in a unique way with Cistercian numerals - a number notation system developed by 13th century monks. Watch as the current date and time are displayed using these elegant historical symbols."
     />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image:src" content="/imgs/cistercian-preview.png" />
+    <meta name="twitter:image" content="https://cistercian.date/imgs/cistercian-preview.png" />
 
-    <meta
-      name="msapplication-TileImage"
-      content="/imgs/cistercian-preview.png"
-    />
-    <meta name="theme-color" content="#FFF" />
-    <meta name="msapplication-TileColor" content="#FFF" />
-
-    <meta
-      name="description"
-      content="An implementation of Cistercian numerals - the number system created by medieval monks - displaying the current date and time in real-time."
-    />
-
+    <!-- Favicon and Theme -->
+    <link rel="canonical" href="https://cistercian.date" />
     <link rel="apple-touch-icon" sizes="600x600" href="/imgs/icon.png" />
     <link rel="icon" type="image/png" href="/imgs/icon.png" />
-    <link rel="icon" type="image/x-icon" href="/imgs/icon.png" />
+    <meta name="theme-color" content="#FFF" />
+    <meta name="msapplication-TileColor" content="#FFF" />
+    <meta name="msapplication-TileImage" content="/imgs/cistercian-preview.png" />
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Styles and Scripts -->
     <link rel="stylesheet" href="css/main.css" />
-    <script src="js/main.js"></script>
+    <script src="js/main.js" defer></script>
+
+    <!-- Schema.org markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebApplication",
+      "name": "Cistercian Date",
+      "url": "https://cistercian.date",
+      "description": "A real-time clock using medieval Cistercian numerals to display the current date and time",
+      "applicationCategory": "Clock",
+      "author": {
+        "@type": "Person",
+        "name": "Jacob DeHart",
+        "url": "https://www.jacobdehart.com"
+      },
+      "browserRequirements": "Requires JavaScript",
+      "softwareVersion": "1.0",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
   </head>
   <body>
     <div class="container">
       <canvas id="cistercian-date"></canvas>
-      <div class="datetime">
+      <div class="datetime decimal">
         <div class="v1"></div>
         <div class="v2"></div>
         <div class="v3"></div>
@@ -115,6 +137,18 @@
               max="1"
               step="0.01"
               value="0.5"
+            />
+          </div>
+          <div class="slider-option">
+            <label for="aspectSlider">Aspect ratio</label>
+            <input
+              type="range"
+              id="aspectSlider"
+              name="aspectSlider"
+              min="0.75"
+              max="2"
+              step="0.01"
+              value="1"
             />
           </div>
           <div class="toggle-option">
@@ -183,7 +217,15 @@
           respective quadrants.
         </p>
       </section>
-
+      <section class="build-a-glyph">
+        <div class="result-display">
+          <canvas class="result"></canvas>
+          <div class="result-decimal decimal"></div>
+        </div>
+        <div class="grid">
+          <!-- Grid cells will be added by JavaScript -->
+        </div>
+      </section>
       <section class="references">
         <h2>References & Further Reading</h2>
         <p>
@@ -219,9 +261,11 @@
       </section>
       <section id="stop-watch">
         <h2>Stopwatch</h2>
-        <p>
-          Cistercian Date also includes a stopwatch feature. Click the "Start" button to begin timing, and click "Stop" to pause.
-        </p>
+
+        <div class="stopwatch-display">
+          <canvas id="stopwatchCanvas"></canvas>
+          <div class="stopwatch-decimal decimal"></div>
+        </div>
         <button id="startStopButton">Start</button>
         <button id="resetButton">Reset</button>
         <div class="stopwatch-controls">
@@ -250,10 +294,6 @@
               </label>
             </div>
           </div>
-        </div>
-        <div class="stopwatch-display">
-          <canvas id="stopwatchCanvas"></canvas>
-          <div class="stopwatch-decimal"></div>
         </div>
       </section>
     </div>

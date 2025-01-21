@@ -2,13 +2,15 @@
 const STORAGE_KEYS = {
   format: 'cistercian-date-format',
   showDecimals: 'cistercian-date-show-decimals',
-  weight: 'cistercian-date-weight'
+  weight: 'cistercian-date-weight',
+  aspectRatio: 'cistercian-date-aspect-ratio'
 };
 
 const DEFAULTS = {
   format: 'us',
   showDecimals: 'true',
-  weight: '0.5'
+  weight: '0.5',
+  aspectRatio: '1'
 };
 
 // Cistercian number configuration
@@ -29,7 +31,7 @@ const CISTERCIAN = {
   },
 
   positions: (() => {
-    const oneThird = 1/3;
+    const oneThird = 5/14;
     return {
       0: [0, 0], 1: [0.5, 0], 2: [1, 0],
       3: [0, oneThird], 4: [0.5, oneThird], 5: [1, oneThird],
@@ -146,7 +148,7 @@ function drawCounter() {
   // Calculate dimensions
   const windowWidth = window.innerWidth;
   const maxWidth = 2 * Math.min(windowWidth * 0.9, 1500);
-  const aspectRatio = 1.5;
+  const aspectRatio = parseFloat(getStorage('aspectRatio'));
   const numberOfDigits = 6;
   const spacing = 0.35;
   const totalSlices = numberOfDigits + (numberOfDigits - 1) * spacing;
@@ -186,6 +188,7 @@ function initializeControls() {
     menu: document.querySelector('.menu'),
     formatRadios: document.querySelectorAll('input[name="dateFormat"]'),
     weightSlider: document.querySelector('#weightSlider'),
+    aspectSlider: document.querySelector('#aspectSlider'),
     showDecimalsToggle: document.querySelector('#showDecimals'),
     datetimeDisplay: document.querySelector('.datetime')
   };
@@ -193,11 +196,11 @@ function initializeControls() {
   // Initialize states
   document.querySelector(`input[value="${getStorage('format')}"]`).checked = true;
   elements.weightSlider.value = getStorage('weight');
+  elements.aspectSlider.value = getStorage('aspectRatio');
   elements.showDecimalsToggle.checked = getStorage('showDecimals') === 'true';
 
-  if (getStorage('showDecimals') === 'false') {
-    elements.datetimeDisplay.classList.add('hidden');
-  }
+  // Initialize decimal visibility
+  document.body.classList.toggle('show-decimals', getStorage('showDecimals') === 'true');
 
   // Event listeners
   elements.questionIcon.addEventListener('click', () => {
@@ -226,9 +229,15 @@ function initializeControls() {
     drawCounter();
   });
 
+  elements.aspectSlider.addEventListener('input', (e) => {
+    setStorage('aspectRatio', e.target.value);
+    clearTimeout(timer);
+    drawCounter();
+  });
+
   elements.showDecimalsToggle.addEventListener('change', (e) => {
     setStorage('showDecimals', e.target.checked);
-    elements.datetimeDisplay.classList.toggle('hidden', !e.target.checked);
+    document.body.classList.toggle('show-decimals', e.target.checked);
   });
 }
 window.addEventListener('resize', () => {
@@ -254,14 +263,37 @@ function initializeStopwatch() {
     precisionRadios: document.querySelectorAll('input[name="precision"]')
   };
 
-  // Set initial canvas size
-  const windowWidth = window.innerWidth;
-  const maxWidth = 2 * Math.min(windowWidth * 0.9, 400); // Reduced max width for single glyph
-  const aspectRatio = 1.5;
-  elements.canvas.width = maxWidth;
-  elements.canvas.height = maxWidth / 2 * aspectRatio;
-  elements.canvas.style.width = `${maxWidth/2}px`;
-  elements.canvas.style.height = `${maxWidth/4 * aspectRatio}px`;
+  function redrawStopwatch() {
+    if (STOPWATCH.elapsedTime !== undefined) {
+      const ctx = elements.canvas.getContext('2d');
+      ctx.clearRect(0, 0, elements.canvas.width, elements.canvas.height);
+      drawStopwatchDisplay(ctx, Math.floor(STOPWATCH.precision === 'milliseconds' ?
+        STOPWATCH.elapsedTime : STOPWATCH.elapsedTime / 1000));
+    }
+  }
+
+  function resizeStopwatchCanvas() {
+    const windowWidth = window.innerWidth;
+    const maxWidth = 2 * Math.min(windowWidth * 0.9, 400);
+    const aspectRatio = parseFloat(getStorage('aspectRatio'));
+    elements.canvas.width = maxWidth;
+    elements.canvas.height = maxWidth / 2 * aspectRatio;
+    elements.canvas.style.width = `${maxWidth/2}px`;
+    elements.canvas.style.height = `${maxWidth/4 * aspectRatio}px`;
+    redrawStopwatch();
+  }
+
+  // Initial size setup
+  resizeStopwatchCanvas();
+
+  // Add aspect ratio change listener
+  document.querySelector('#aspectSlider').addEventListener('input', resizeStopwatchCanvas);
+
+  // Add line weight change listener
+  document.querySelector('#weightSlider').addEventListener('input', redrawStopwatch);
+
+  // Add resize listener
+  window.addEventListener('resize', resizeStopwatchCanvas);
 
   function updateStopwatch() {
     if (!STOPWATCH.isRunning) return;
@@ -367,9 +399,149 @@ function initializeStopwatch() {
   resetStopwatch();
 }
 
+function initializeGlyphBuilder() {
+  const elements = {
+    grid: document.querySelector('.grid'),
+    result: document.querySelector('.build-a-glyph .result'),
+    resultDecimal: document.querySelector('.build-a-glyph .result-decimal')
+  };
+
+  const state = {
+    selected: {
+      thousands: 0,
+      hundreds: 0,
+      tens: 0,
+      ones: 0
+    },
+    cells: {
+      thousands: [],
+      hundreds: [],
+      tens: [],
+      ones: []
+    }
+  };
+
+  function updateCellVisuals() {
+    Object.entries(state.cells).forEach(([position, cells]) => {
+      cells.forEach(({ cell, updateCell, value }) => {
+        const isSelected = state.selected[position] === value;
+        cell.classList.toggle('selected', isSelected);
+        updateCell(isSelected);
+      });
+    });
+  }
+
+  function createGlyphCell(value, position) {
+    const cell = document.createElement('div');
+    cell.className = 'grid-cell';
+
+    const canvas = document.createElement('canvas');
+    const decimal = document.createElement('div');
+    decimal.className = 'grid-cell-decimal decimal';
+    decimal.textContent = value;
+
+    function updateCell(isSelected) {
+      const windowWidth = window.innerWidth;
+      const maxWidth = 2 * Math.min(windowWidth * 0.15, 100);
+      const aspectRatio = parseFloat(getStorage('aspectRatio'));
+      canvas.width = maxWidth;
+      canvas.height = maxWidth / 2 * aspectRatio;
+      canvas.style.width = `${maxWidth/2}px`;
+      canvas.style.height = `${maxWidth/4 * aspectRatio}px`;
+
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const weight = parseFloat(getStorage('weight'));
+      const color = isSelected ? '#000' : '#ccc';
+      ctx.drawImage(
+        drawCistercianNumber(value, canvas.width/2, canvas.height, weight, color),
+        canvas.width/4,
+        0
+      );
+    }
+
+    const cellData = { cell, updateCell, value };
+    state.cells[position].push(cellData);
+
+    cell.appendChild(canvas);
+    cell.appendChild(decimal);
+    updateCell(false);
+
+    cell.addEventListener('click', () => {
+      const currentValue = state.selected[position];
+      state.selected[position] = currentValue === value ? 0 : value;
+      updateCellVisuals();
+      updateResult();
+    });
+
+    return cellData;
+  }
+
+  function updateResult() {
+    const { thousands, hundreds, tens, ones } = state.selected;
+    const resultValue = thousands + hundreds + tens + ones;
+
+    const windowWidth = window.innerWidth;
+    const maxWidth = 2 * Math.min(windowWidth * 0.4, 400); // Increased size
+    const aspectRatio = parseFloat(getStorage('aspectRatio'));
+    elements.result.width = maxWidth;
+    elements.result.height = maxWidth / 2 * aspectRatio;
+    elements.result.style.width = `${maxWidth/2}px`;
+    elements.result.style.height = `${maxWidth/4 * aspectRatio}px`;
+
+    const ctx = elements.result.getContext('2d');
+    ctx.clearRect(0, 0, elements.result.width, elements.result.height);
+
+    const weight = parseFloat(getStorage('weight'));
+
+      ctx.drawImage(
+        drawCistercianNumber(resultValue, elements.result.width/2, elements.result.height, weight),
+        elements.result.width/4,
+        0
+      );
+
+
+    elements.resultDecimal.textContent = resultValue || '0';
+  }
+
+  // Create grid cells
+  const cells = [];
+  for (let i = 1; i <= 9; i++) {
+    cells.push(createGlyphCell(i * 1000, 'thousands'));
+    cells.push(createGlyphCell(i * 100, 'hundreds'));
+    cells.push(createGlyphCell(i * 10, 'tens'));
+    cells.push(createGlyphCell(i, 'ones'));
+  }
+
+  // Add cells to grid
+  cells.forEach(({ cell }) => elements.grid.appendChild(cell));
+
+  // Update control listeners
+  document.querySelector('#weightSlider').addEventListener('input', () => {
+    updateCellVisuals();
+    updateResult();
+  });
+
+  document.querySelector('#aspectSlider').addEventListener('input', () => {
+    updateCellVisuals();
+    updateResult();
+  });
+
+  // Initial result
+  updateResult();
+
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    updateCellVisuals();
+    updateResult();
+  });
+}
+
 // Initialize on ready
 document.addEventListener('DOMContentLoaded', () => {
   initializeControls();
   initializeStopwatch();
+  initializeGlyphBuilder();
   drawCounter();
 });
