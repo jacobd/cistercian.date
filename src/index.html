@@ -60,6 +60,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/main.css" />
+    <script src="js/main.js"></script>
   </head>
   <body>
     <div class="container">
@@ -120,12 +121,150 @@
             <input type="checkbox" id="showDecimals" name="showDecimals" />
             <label for="showDecimals">Show decimal numbers</label>
           </div>
-          <div class="about">
+          <div class="credit">
             By <a href="https://www.jacobdehart.com">Jacob DeHart</a>
           </div>
         </div>
       </div>
     </div>
-    <script src="js/main.js"></script>
+    <div class="about">
+      <section>
+        <h1>Cistercian Date</h1>
+        <p>
+          Cistercian Date displays the current time using a medieval number
+          system created by Cistercian monks. Each vertical glyph represents a
+          complete number, showing the date and time in an elegant,
+          space-efficient format that bridges a thousand years of human
+          ingenuity.
+        </p>
+      </section>
+
+      <section>
+        <h2>The Cistercian Order</h2>
+        <p>
+          The Cistercian Order was founded in 1098 in Cîteaux, France, as a
+          reform movement within the Benedictine monastic tradition. These
+          monks, known for their architectural innovations and agricultural
+          expertise, sought to return to a stricter interpretation of the Rule
+          of Saint Benedict.
+        </p>
+        <p>
+          In the 13th century, Cistercian monks developed their unique number
+          notation system to maintain records of their inventories, astronomical
+          calculations, and musical notations. The system allowed them to record
+          numbers efficiently in their manuscripts while saving valuable space
+          on expensive parchment.
+        </p>
+      </section>
+
+      <section>
+        <h2>The Number System</h2>
+        <p>
+          The Cistercian numeral system is remarkably efficient: it can
+          represent any number from 0 to 9,999 using a single symbol. Each glyph
+          is built around a vertical line, with additional marks added to
+          represent different values.
+        </p>
+        <p>
+          The system divides the vertical line into four quadrants: the right
+          and left sides of both the top and bottom. Each quadrant represents a
+          different place value:
+        </p>
+        <ul>
+          <li>Top right: ones (1-9)</li>
+          <li>Top left: tens (10-90)</li>
+          <li>Bottom right: hundreds (100-900)</li>
+          <li>Bottom left: thousands (1000-9000)</li>
+        </ul>
+        <p>
+          By combining these marks, scribes could efficiently represent complex
+          numbers. For example, the number 1,234 would be written as a single
+          symbol combining the marks for 1000, 200, 30, and 4 in their
+          respective quadrants.
+        </p>
+      </section>
+
+      <section class="references">
+        <h2>References & Further Reading</h2>
+        <p>
+          To learn more about Cistercian numerals and their fascinating history,
+          check out these excellent resources:
+        </p>
+        <ul>
+          <li>
+            <a href="https://en.wikipedia.org/wiki/Cistercian_numerals">
+              Wikipedia: Cistercian Numerals
+            </a>
+            - A comprehensive overview of the number system's history and usage
+          </li>
+          <li>
+            <a href="https://www.ncregister.com/blog/cistercian-numerals-secret-code">
+              National Catholic Register: The Secret Catholic Code of Cistercian Numerals
+            </a>
+            - An exploration of the system's religious and historical context
+          </li>
+          <li>
+            <a href="https://kottke.org/23/01/cistercian-numerals">
+              Kottke.org: Cistercian Numerals
+            </a>
+            - A modern perspective on this medieval innovation
+          </li>
+          <li>
+            <a href="https://www.youtube.com/watch?v=9p55Qgt7Ciw">
+              Numberphile: Cistercian Numbers
+            </a>
+            - An engaging video explanation of how the system works
+          </li>
+        </ul>
+      </section>
+      <section id="stop-watch">
+        <h2>Stopwatch</h2>
+        <p>
+          Cistercian Date also includes a stopwatch feature. Click the "Start" button to begin timing, and click "Stop" to pause.
+        </p>
+        <button id="startStopButton">Start</button>
+        <button id="resetButton">Reset</button>
+        <div class="stopwatch-controls">
+          <div class="precision-options">
+            <div class="precision-option">
+              <label for="seconds">
+                <input
+                  type="radio"
+                  id="seconds"
+                  name="precision"
+                  value="seconds"
+                  checked
+                />
+                <span>Seconds</span>
+              </label>
+            </div>
+            <div class="precision-option">
+              <label for="milliseconds">
+                <input
+                  type="radio"
+                  id="milliseconds"
+                  name="precision"
+                  value="milliseconds"
+                />
+                <span>Milliseconds</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="stopwatch-display">
+          <canvas id="stopwatchCanvas"></canvas>
+          <div class="stopwatch-decimal"></div>
+        </div>
+      </section>
+    </div>
+    <footer class="site-footer">
+      <div class="footer-content">
+        <p>
+          Created by <a href="https://www.jacobdehart.com">Jacob DeHart</a>
+          &nbsp;|&nbsp;
+          <a href="https://github.com/jacobd/cistercian.date">View on GitHub</a>
+        </p>
+      </div>
+    </footer>
   </body>
 </html>

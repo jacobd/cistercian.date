@@ -62,7 +62,7 @@ body {
 
 /* Controls */
 .controls {
-  position: fixed;
+  position: absolute;
   bottom: var(--margin-edge);
   right: var(--margin-edge);
 }
@@ -168,7 +168,7 @@ body {
   cursor: pointer;
 }
 
-.about {
+.credit {
   margin-top: var(--spacing-md);
   font-size: 0.9rem;
   text-align: center;
@@ -177,4 +177,134 @@ body {
   a {
     color: var(--color-text);
   }
+}
+
+.about {
+  max-width: 800px;
+  margin: 5rem auto;
+  padding: 0 var(--spacing-md);
+}
+
+.about h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.about section {
+  margin-bottom: 3rem;
+}
+
+.about h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.about p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.about ul {
+  margin: 1rem 0 1rem 2rem;
+  line-height: 1.6;
+}
+
+.about li {
+  margin-bottom: 0.5rem;
+}
+
+.references a {
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.references a:hover {
+  border-bottom-color: var(--color-text);
+}
+
+.references li {
+  margin-bottom: var(--spacing-md);
+}
+
+#stop-watch {
+  text-align: center;
+}
+
+#stop-watch button {
+  margin: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: var(--border-width) solid var(--color-border);
+  background: var(--color-bg);
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+#stop-watch button:hover {
+  background: var(--color-border);
+  color: var(--color-bg);
+}
+
+.stopwatch-controls {
+  margin: var(--spacing-md) 0;
+}
+
+.precision-options {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+.precision-option label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.precision-option input[type="radio"] {
+  cursor: pointer;
+}
+
+#stopwatchCanvas {
+  margin: var(--spacing-md) 0;
+}
+
+.stopwatch-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.stopwatch-decimal {
+  font-size: 1.2rem;
+  min-height: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.site-footer {
+  margin-top: 5rem;
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--color-divider);
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 0.9rem;
+}
+
+.site-footer a {
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.site-footer a:hover {
+  border-bottom-color: var(--color-text);
 }

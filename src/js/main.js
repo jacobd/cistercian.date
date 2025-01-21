@@ -236,6 +236,140 @@ window.addEventListener('resize', () => {
   drawCounter();
 });
 
-// Initialize
-initializeControls();
-drawCounter();
+// Stopwatch configuration
+const STOPWATCH = {
+  startTime: null,
+  elapsedTime: 0,
+  isRunning: false,
+  timer: null,
+  precision: 'seconds'
+};
+
+function initializeStopwatch() {
+  const elements = {
+    startStopButton: document.querySelector('#startStopButton'),
+    resetButton: document.querySelector('#resetButton'),
+    canvas: document.querySelector('#stopwatchCanvas'),
+    decimal: document.querySelector('.stopwatch-decimal'),
+    precisionRadios: document.querySelectorAll('input[name="precision"]')
+  };
+
+  // Set initial canvas size
+  const windowWidth = window.innerWidth;
+  const maxWidth = 2 * Math.min(windowWidth * 0.9, 400); // Reduced max width for single glyph
+  const aspectRatio = 1.5;
+  elements.canvas.width = maxWidth;
+  elements.canvas.height = maxWidth / 2 * aspectRatio;
+  elements.canvas.style.width = `${maxWidth/2}px`;
+  elements.canvas.style.height = `${maxWidth/4 * aspectRatio}px`;
+
+  function updateStopwatch() {
+    if (!STOPWATCH.isRunning) return;
+
+    const now = Date.now();
+    STOPWATCH.elapsedTime = now - STOPWATCH.startTime;
+
+    let displayValue;
+    if (STOPWATCH.precision === 'milliseconds') {
+      displayValue = Math.floor(STOPWATCH.elapsedTime);
+      if (displayValue >= 9999) {
+        toggleStopwatch();
+        displayValue = 9999;
+      } else {
+        STOPWATCH.timer = requestAnimationFrame(updateStopwatch);
+      }
+    } else {
+      displayValue = Math.floor(STOPWATCH.elapsedTime / 1000);
+      if (displayValue >= 9999) {
+        toggleStopwatch();
+        displayValue = 9999;
+      } else {
+        STOPWATCH.timer = setTimeout(updateStopwatch, 1000);
+      }
+    }
+
+    const ctx = elements.canvas.getContext('2d');
+    ctx.clearRect(0, 0, elements.canvas.width, elements.canvas.height);
+
+    drawStopwatchDisplay(ctx, displayValue);
+    elements.decimal.textContent = displayValue + (STOPWATCH.precision === 'milliseconds' ? 'ms' : 's');
+  }
+
+  function drawStopwatchDisplay(ctx, value) {
+    const weight = parseFloat(getStorage('weight'));
+    ctx.drawImage(
+      drawCistercianNumber(value, elements.canvas.width/2, elements.canvas.height, weight),
+      elements.canvas.width/4,
+      0
+    );
+  }
+
+  function toggleStopwatch() {
+    if (STOPWATCH.isRunning) {
+      // Stop
+      STOPWATCH.isRunning = false;
+      if (STOPWATCH.precision === 'milliseconds') {
+        cancelAnimationFrame(STOPWATCH.timer);
+      } else {
+        clearTimeout(STOPWATCH.timer);
+      }
+      elements.startStopButton.textContent = 'Start';
+    } else {
+      // Start
+      STOPWATCH.isRunning = true;
+      // Reset if we were stopped at max value
+      if (STOPWATCH.elapsedTime >= 9999) {
+        STOPWATCH.elapsedTime = 0;
+        STOPWATCH.startTime = null;
+      }
+
+      if (!STOPWATCH.startTime) {
+        STOPWATCH.startTime = Date.now();
+      } else {
+        STOPWATCH.startTime = Date.now() - STOPWATCH.elapsedTime;
+      }
+      elements.startStopButton.textContent = 'Stop';
+      updateStopwatch();
+    }
+  }
+
+  function resetStopwatch() {
+    STOPWATCH.isRunning = false;
+    STOPWATCH.startTime = null;
+    STOPWATCH.elapsedTime = 0;
+    if (STOPWATCH.precision === 'milliseconds') {
+      cancelAnimationFrame(STOPWATCH.timer);
+    } else {
+      clearTimeout(STOPWATCH.timer);
+    }
+    elements.startStopButton.textContent = 'Start';
+
+    const ctx = elements.canvas.getContext('2d');
+    ctx.clearRect(0, 0, elements.canvas.width, elements.canvas.height);
+    drawStopwatchDisplay(ctx, 0);
+    elements.decimal.textContent = '0' + (STOPWATCH.precision === 'milliseconds' ? 'ms' : 's');
+  }
+
+  // Event listeners
+  elements.startStopButton.addEventListener('click', toggleStopwatch);
+  elements.resetButton.addEventListener('click', resetStopwatch);
+
+  elements.precisionRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        STOPWATCH.precision = e.target.value;
+        resetStopwatch();
+      }
+    });
+  });
+
+  // Initialize display
+  resetStopwatch();
+}
+
+// Initialize on ready
+document.addEventListener('DOMContentLoaded', () => {
+  initializeControls();
+  initializeStopwatch();
+  drawCounter();
+});
