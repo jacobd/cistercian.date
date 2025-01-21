@@ -62,7 +62,6 @@ body {
 
 /* Controls */
 .controls {
-  display: none;
   position: fixed;
   bottom: var(--margin-edge);
   right: var(--margin-edge);
