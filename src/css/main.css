@@ -368,10 +368,14 @@ body {
 
 .grid-cell canvas {
   transition: opacity 0.2s ease;
+  opacity: 0.5;
 }
 
 .grid-cell.selected canvas {
-
+  opacity: 1;
+}
+.grid-cell:hover canvas {
+  opacity: 1;
 }
 
 .grid-cell-decimal {

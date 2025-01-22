@@ -453,7 +453,7 @@ function initializeGlyphBuilder() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const weight = parseFloat(getStorage('weight'));
-      const color = isSelected ? '#000' : '#ccc';
+      const color = isSelected ? '#000' : '#777';
       ctx.drawImage(
         drawCistercianNumber(value, canvas.width/2, canvas.height, weight, color),
         canvas.width/4,
