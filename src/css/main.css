@@ -403,6 +403,10 @@ body.show-decimals .datetime.decimal {
   display: grid;
 }
 
+label[for="showDecimals"] {
+  user-select: none;
+}
+
 /* Remove redundant hidden classes */
 .datetime.hidden,
 .stopwatch-decimal.hidden,
